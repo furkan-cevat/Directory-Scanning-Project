@@ -49,7 +49,7 @@ public class DemoApplication {
             //submit() metodunun dönüş türü bir Future objesidir, ancak execute() yönteminin dönüş türü yoktur(void).
             result.add(executorService.submit(list.get(i)));
             //Result'lar result içine alındı.
-            //System.out.println(" Task : " + i + " durum : " + result.get(i));
+            //System.out.println(" Task : " + i + " durum : " + result.get(i)); //Tasklar tamamlanmadı.
         }
         //"FutureTask" class'ı "Future" interfacesini implement eder.Dolayısıyla "Future" tipinden bir referans "FutureTask" nesnesini gösterebilir.
         //submit eklediğimiz her bir "Runnable" için bir "FutureTask" döndürür.
@@ -65,7 +65,7 @@ public class DemoApplication {
         List<Map<String, Integer>> list2= new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             Map<String, Integer> temp = result.get(i).get(); //Futuretask'ın get() yöntemi görevin tamamlanmasını bekler ve ardından çıktı nesnesini döndürür.
-            //System.out.println(" Task : " + i + " durum : " + result.get(i));
+            //System.out.println(" Task : " + i + " durum : " + result.get(i)); //Tasklar tamamlandı.
             list2.add(temp);
             System.out.println(temp);
 
