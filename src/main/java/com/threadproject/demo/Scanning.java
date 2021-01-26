@@ -3,12 +3,12 @@ package com.threadproject.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,24 +17,38 @@ import java.util.concurrent.Future;
 @Component
 public class Scanning {
 
+    ExecutorService executorService;
+
+    //PostConstruct annotation'u, herhangi bir initalization gerçekleştirmek için bağımlılık
+    // enjeksiyonu yapıldıktan sonra çalıştırılması gereken bir yöntemde kullanılır.
+    @PostConstruct
+    public void initExecutorService(){
+        System.out.println("initExecutorService");
+        executorService = Executors.newCachedThreadPool();
+    }
+
+
     @Autowired
     private FileOperations fileOperations;
 
     public void doScanning() throws ExecutionException, InterruptedException, FileNotFoundException {
+
+        System.out.println(executorService);
+
         String folderPath = "/home/furkanyilmaz/Masaüstü/Files";
         File file = new File(folderPath);
         File[] listOfFiles = {};
         if (!file.isFile()) {
             listOfFiles = file.listFiles();
         }
-        ExecutorService executorService = Executors.newFixedThreadPool(listOfFiles.length);
+
         List<FileReader> list = new ArrayList<>();
         List<Future<Map<String, Integer>>> result = new ArrayList<>();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             list.add(new FileReader(listOfFiles[i].getAbsolutePath()));
         }
-        Set<Thread> threadSet1 = Thread.getAllStackTraces().keySet(); //31 thread var
+        //Set<Thread> threadSet1 = Thread.getAllStackTraces().keySet(); //31 thread var
         //callable ile task submit etme
         for (int i = 0; i < list.size(); i++) {
             //submit() hem Runnable hem de Callable taskları kabul edebilir, ancak execute() yalnızca Runnable taskları kabul edebilir.
@@ -43,7 +57,7 @@ public class Scanning {
             //Result'lar result içine alındı.
             //System.out.println(" Task : " + i + " durum : " + result.get(i)); //Tasklar tamamlanmadı.
         }
-        Set<Thread> threadSet2 = Thread.getAllStackTraces().keySet(); //38 thread var.7 thread 7 dosyaya atanan threadler
+        //Set<Thread> threadSet2 = Thread.getAllStackTraces().keySet(); //38 thread var.7 thread 7 dosyaya atanan threadler
         //"FutureTask" class'ı "Future" interfacesini implement eder.Dolayısıyla "Future" tipinden bir referans "FutureTask" nesnesini gösterebilir.
         //submit eklediğimiz her bir "Runnable" için bir "FutureTask" döndürür.
         //submit hesaplama sonucunu döndürür.execute ise birşey döndürmez.
@@ -66,6 +80,5 @@ public class Scanning {
         fileOperations.write(list2.toString(), filePath);
 
         System.out.println();
-        executorService.shutdown();
     }
 }

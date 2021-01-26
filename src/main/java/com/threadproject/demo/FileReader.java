@@ -35,7 +35,6 @@ public class FileReader implements Callable<Map<String, Integer>> {
 
         fstream.close();
 
-
         return map;
     }
 }

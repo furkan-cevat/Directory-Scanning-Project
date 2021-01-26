@@ -15,7 +15,6 @@ public class FileOperations {
     String filePath = directoryPath + "/Result";
 
     public void createFolder() {
-
         File dir = new File(directoryPath);
         dir.mkdir(); // Klasör oluşturuluyor
     }
