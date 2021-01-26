@@ -45,10 +45,13 @@ public class DemoApplication {
 
         //callable ile task submit etme
         for (int i = 0; i < list.size(); i++) {
+            //submit() hem Runnable hem de Callable taskları kabul edebilir, ancak execute() yalnızca Runnable taskları kabul edebilir.
+            //submit() metodunun dönüş türü bir Future objesidir, ancak execute() yönteminin dönüş türü yoktur(void).
             result.add(executorService.submit(list.get(i)));
             //Result'lar result içine alındı.
             //System.out.println(" Task : " + i + " durum : " + result.get(i));
         }
+        //"FutureTask" class'ı "Future" interfacesini implement eder.Dolayısıyla "Future" tipinden bir referans "FutureTask" nesnesini gösterebilir.
         //submit eklediğimiz her bir "Runnable" için bir "FutureTask" döndürür.
         //submit hesaplama sonucunu döndürür.execute ise birşey döndürmez.
         //result->0->outcome : outcome hashmap'tir ve dosya adı ile hesaplanan değeri döner.
