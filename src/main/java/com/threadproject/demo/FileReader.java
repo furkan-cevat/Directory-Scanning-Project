@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+//Runnuable ve Callable bir görevi farklı bir Thread ile çalıştırmak için kullanılan iki interface'dir.
+//Runnable'ın run() yöntemi geri bir sonuç döndürmezken, Callable'nın call() yöntemi sonuç döndürür.
+//Ek olarak call() yöntemi Exception oluşturarak işlemden çıkabilir. Runnable'nın run yöntemi exception fırlatamaz.
+//Callable ile bir Thread yaratılamaz. Thread ancak Runnable ile yaratılabilir. Callable ise ExecutorService sınıfları ile çalıştırılabilir.
 public class FileReader implements Callable<Map<String, Integer>> {
 
     String fileName;
