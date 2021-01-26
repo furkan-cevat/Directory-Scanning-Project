@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,7 +34,7 @@ public class Scanning {
         for (int i = 0; i < listOfFiles.length; i++) {
             list.add(new FileReader(listOfFiles[i].getAbsolutePath()));
         }
-
+        Set<Thread> threadSet1 = Thread.getAllStackTraces().keySet(); //31 thread var
         //callable ile task submit etme
         for (int i = 0; i < list.size(); i++) {
             //submit() hem Runnable hem de Callable taskları kabul edebilir, ancak execute() yalnızca Runnable taskları kabul edebilir.
@@ -42,6 +43,7 @@ public class Scanning {
             //Result'lar result içine alındı.
             //System.out.println(" Task : " + i + " durum : " + result.get(i)); //Tasklar tamamlanmadı.
         }
+        Set<Thread> threadSet2 = Thread.getAllStackTraces().keySet(); //38 thread var.7 thread 7 dosyaya atanan threadler
         //"FutureTask" class'ı "Future" interfacesini implement eder.Dolayısıyla "Future" tipinden bir referans "FutureTask" nesnesini gösterebilir.
         //submit eklediğimiz her bir "Runnable" için bir "FutureTask" döndürür.
         //submit hesaplama sonucunu döndürür.execute ise birşey döndürmez.
