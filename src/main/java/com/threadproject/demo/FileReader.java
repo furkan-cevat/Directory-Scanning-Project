@@ -42,19 +42,20 @@ public class FileReader implements Callable<Map<String, Integer>> {
     @Override
     public Map<String,Integer> call() throws Exception {
         Map<String,Integer> map = new HashMap<>();
-        FileInputStream fstream = getFileInputStream(this.fileName);
-        InputStreamReader isr = getInputStreamReader(fstream);
-        BufferedReader br = getBufferedReader(isr);
+        InputStreamReader isr;
+        try (FileInputStream fstream = getFileInputStream(this.fileName)) {
+            isr = getInputStreamReader(fstream);
+            try (BufferedReader br = getBufferedReader(isr)) {
+                String strLine;
+                int count = 0;
+                while ((strLine = br.readLine()) != null) {
+                    count += Integer.parseInt(strLine);
+                }
+                map.put(this.fileName, count);
 
-        String strLine;
-        int count=0;
-        while ((strLine = br.readLine()) != null)   {
-            count+=Integer.parseInt(strLine);
+                fstream.close();
+            }
         }
-        map.put(this.fileName,count);
-
-        fstream.close();
-        br.close();
         isr.close();
 
         return map;

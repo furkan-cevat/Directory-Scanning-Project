@@ -49,17 +49,13 @@ public class FileOperations {
     public void write(String text, String filePath) {
         file = getOutputFile(); // hangi dosya üzerinde işlem yapacağımızı seçiyoruz.
         String[] arr = text.split(",");
-
-        try {
-            FileOutputStream fos = getFileOutputStream();
+        try (FileOutputStream fos = new FileOutputStream(filePath)){
             for (String a : arr){
                 fos.write(a.getBytes());
                 fos.write("\n".getBytes(StandardCharsets.UTF_8));
             }
             fos.write("\n".getBytes(StandardCharsets.UTF_8));
             fos.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
