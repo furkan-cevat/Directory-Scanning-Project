@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class FileOperations {
+    private FileOutputStream fos;
     private File file;
     private File outputDirectory;
     private String directoryPath = "/home/furkanyilmaz/Masaüstü/ResultDirectory";
@@ -26,6 +27,14 @@ public class FileOperations {
             file = new File(directoryPath + "/Result");
         }
     }
+
+    public FileOutputStream getFileOutputStream() throws FileNotFoundException {
+        if(null == fos) {
+            fos = new FileOutputStream(file);
+        }
+        return fos;
+    }
+
     public File getOutputFile(){
         return file;
     }
@@ -42,13 +51,13 @@ public class FileOperations {
         String[] arr = text.split(",");
 
         try {
-            FileOutputStream fos = new FileOutputStream(file);
+            FileOutputStream fos = getFileOutputStream();
             for (String a : arr){
                 fos.write(a.getBytes());
                 fos.write("\n".getBytes(StandardCharsets.UTF_8));
             }
+            fos.write("\n".getBytes(StandardCharsets.UTF_8));
             fos.flush();
-            fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
