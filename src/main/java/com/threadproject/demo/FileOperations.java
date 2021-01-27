@@ -2,6 +2,7 @@ package com.threadproject.demo;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,30 +11,35 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class FileOperations {
-    public File file;
-    String directoryPath = "/home/furkanyilmaz/Masaüstü/ResultDirectory";
-    String filePath = directoryPath + "/Result";
+    private File file;
+    private File outputDirectory;
+    private String directoryPath = "/home/furkanyilmaz/Masaüstü/ResultDirectory";
 
-    public void createFolder() {
-        File dir = new File(directoryPath);
-        dir.mkdir(); // Klasör oluşturuluyor
+    @PostConstruct
+    public void outputFileCreate(){
+        createOutputFolder();
+        createOutputFile();
     }
 
-    public String createFile() {
-        try {
-            file = new File(filePath);
-            file.createNewFile(); // Dosya oluşturuluyor
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    public void createOutputFile(){
+        if(null == file) {
+            file = new File(directoryPath + "/Result");
         }
-        return file.getAbsolutePath();
+    }
+    public File getOutputFile(){
+        return file;
     }
 
-    public void write(String text, String filePath) throws FileNotFoundException {
-        File file = new File(filePath); // hangi dosya üzerinde işlem yapacağımızı seçiyoruz.
+    public void createOutputFolder() {
+        if(null == outputDirectory) {
+            outputDirectory = new File(directoryPath);
+            outputDirectory.mkdir();
+        }
+    }
 
-        String temp = text.toString();
-        String[] arr = temp.split(",");
+    public void write(String text, String filePath) {
+        file = getOutputFile(); // hangi dosya üzerinde işlem yapacağımızı seçiyoruz.
+        String[] arr = text.split(",");
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
